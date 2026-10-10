@@ -1,0 +1,74 @@
+cmake_minimum_required(VERSION 3.21)
+project(ModInstaller VERSION 1.0.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+find_package(Qt6 REQUIRED COMPONENTS Widgets Network Svg LinguistTools)
+find_package(QuaZip-Qt6 REQUIRED)
+
+set(SOURCES
+    src/main.cpp
+    src/core/Util.h
+    src/core/Models.h
+    src/core/Settings.h
+    src/core/Settings.cpp
+    src/core/Net.h
+    src/core/Net.cpp
+    src/core/Downloader.h
+    src/core/Downloader.cpp
+    src/core/ModApi.h
+    src/core/ModApi.cpp
+    src/core/VersionData.h
+    src/core/VersionData.cpp
+    src/core/DependencyResolver.h
+    src/core/DependencyResolver.cpp
+    src/core/ModPak.h
+    src/core/ModPak.cpp
+    src/core/PackJob.h
+    src/core/PackJob.cpp
+    src/ui/IconCache.h
+    src/ui/IconCache.cpp
+    src/ui/MainWindow.h
+    src/ui/MainWindow.cpp
+    src/ui/SettingsDialog.h
+    src/ui/SettingsDialog.cpp
+    src/ui/LoaderVersionDialog.h
+    src/ui/LoaderVersionDialog.cpp
+    src/ui/ModBrowserDialog.h
+    src/ui/ModBrowserDialog.cpp
+    src/ui/DependencyReviewDialog.h
+    src/ui/DependencyReviewDialog.cpp
+    src/ui/FileTargetDialog.h
+    src/ui/FileTargetDialog.cpp
+    src/ui/BlockedModsDialog.h
+    src/ui/BlockedModsDialog.cpp
+    src/ui/ProgressDialog.h
+    src/ui/ProgressDialog.cpp
+    src/ui/Flows.h
+    src/ui/Flows.cpp
+    src/ui/UpdateModsDialog.h
+    src/ui/UpdateModsDialog.cpp
+    src/ui/PakEditorDialog.h
+    src/ui/PakEditorDialog.cpp
+    resources/resources.qrc
+)
+
+if(WIN32)
+    list(APPEND SOURCES resources/app.rc)
+endif()
+
+add_executable(ModInstaller WIN32 ${SOURCES})
+target_include_directories(ModInstaller PRIVATE src)
+target_link_libraries(ModInstaller PRIVATE Qt6::Widgets Qt6::Network Qt6::Svg QuaZip::QuaZip)
+target_compile_definitions(ModInstaller PRIVATE APP_VERSION="${PROJECT_VERSION}")
+
+if(MSVC)
+    target_compile_options(ModInstaller PRIVATE /utf-8 /W3)
+endif()
+
+qt_add_translations(ModInstaller
+    TS_FILES i18n/ModInstaller_zh_TW.ts i18n/ModInstaller_en.ts
+    RESOURCE_PREFIX /i18n)
