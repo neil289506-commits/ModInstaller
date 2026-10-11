@@ -1,7 +1,47 @@
+<div align="center">
+
 # ModInstaller
 
-Minecraft 模組包建立 / 更新工具（Qt6 / C++，僅支援 Windows）。
-模組搜尋、版本篩選與依賴解析的邏輯移植自 [PrismLauncher](https://github.com/PrismLauncher/PrismLauncher)，因此以 **GPL-3.0** 授權。
+**建立、分享與更新 Minecraft 模組包** — 搜尋 Modrinth / CurseForge、自動補齊依賴、一鍵輸出 zip 或超輕量的 `.modpak`
+
+![Qt6](https://img.shields.io/badge/Qt-6-41cd52?logo=qt&logoColor=white)
+![Platform](https://img.shields.io/badge/platform-Windows-0078d6)
+![License](https://img.shields.io/badge/license-GPL--3.0-blue)
+
+![主畫面](docs/screenshots/01-home.png)
+
+</div>
+
+> 以下截圖使用示意資料。
+
+## 為什麼用 ModInstaller？
+- **不用啟動器**：只想整理模組清單，不需要建立遊戲實例
+- **自動補齊依賴**：搜索邏輯移植自 PrismLauncher，連 Fabric API ↔ Quilted Fabric API 都會自動轉換
+- **`.modpak` 輕量分享**：只存模組清單與 sha256，檔案只有幾 KB，收到的人再「請求模組包檔案」就能還原成 zip
+- **雙平台來源**：Modrinth 與 CurseForge 一起搜尋
+- **繁體中文 / English**
+
+## 使用流程
+
+### 1. 選擇載入器與版本
+Fabric / Quilt / Forge / NeoForge 與遊戲版本，版本資料直接從官方來源下載，不需要 Python。
+
+![選擇載入器與版本](docs/screenshots/02-loader.png)
+
+### 2. 搜尋並選取模組
+左側是搜尋結果，右側是詳細資訊與版本選擇，底部是已選取清單。
+
+![搜尋並選取模組](docs/screenshots/03-browser.png)
+
+### 3. 確認依賴
+自動搜索到的必要依賴會列出並標示「被誰需要」，可自行取消勾選。
+
+![確認依賴](docs/screenshots/04-dependencies.png)
+
+### 4. 輸出
+選擇 **zip**（下載全部模組並壓縮）或 **modpak**（只存資訊），名稱與儲存位置都由你決定。
+
+![輸出模組包](docs/screenshots/05-export.png)
 
 ## 功能
 | 入口 | 說明 |

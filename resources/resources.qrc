@@ -8,5 +8,6 @@
     <file>icons/github.svg</file>
     <file>icons/edit.svg</file>
     <file>icons/arrow-down.svg</file>
+    <file>icons/check.svg</file>
   </qresource>
 </RCC>
