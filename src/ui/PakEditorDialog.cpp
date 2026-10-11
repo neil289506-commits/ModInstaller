@@ -1,4 +1,6 @@
 #include "PakEditorDialog.h"
+#include <functional>
+#include <algorithm>
 #include "FileTargetDialog.h"
 #include "Flows.h"
 #include "ModBrowserDialog.h"

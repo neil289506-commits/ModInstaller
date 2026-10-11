@@ -1,4 +1,5 @@
 #include "Flows.h"
+#include <algorithm>
 #include "BlockedModsDialog.h"
 #include "FileTargetDialog.h"
 #include "LoaderVersionDialog.h"
