@@ -35,7 +35,7 @@ jobs:
         with:
           arch: x64
 
-      - name: 設定（QuaZip 由 CMake 自動取得）
+      - name: 設定（libwebp 由 CMake 自動取得）
         run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 
       - name: 編譯
