@@ -7,25 +7,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Network Svg LinguistTools)
-# QuaZip：優先使用已安裝的版本（例如 vcpkg）；找不到時自動用 FetchContent 下載並一起編譯
-find_package(QuaZip-Qt6 QUIET)
-if(NOT QuaZip-Qt6_FOUND)
-    message(STATUS "找不到已安裝的 QuaZip，改用 FetchContent 取得")
-    include(FetchContent)
-    set(QUAZIP_QT_MAJOR_VERSION 6 CACHE STRING "" FORCE)
-    set(QUAZIP_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
-    set(QUAZIP_INSTALL OFF CACHE BOOL "" FORCE)
-    set(QUAZIP_BZIP2 OFF CACHE BOOL "" FORCE)
-    set(QUAZIP_FETCH_LIBS ON CACHE BOOL "" FORCE)
-    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-    FetchContent_Declare(QuaZip
-        GIT_REPOSITORY https://github.com/stachenov/quazip.git
-        GIT_TAG v1.4
-        SOURCE_DIR ${CMAKE_BINARY_DIR}/ext/quazip/quazip)
-    FetchContent_MakeAvailable(QuaZip)
-    target_include_directories(QuaZip PUBLIC ${CMAKE_BINARY_DIR}/ext/quazip)
-endif()
-
 # libwebp：Qt 不一定附 WebP 外掛，但 Modrinth 的模組圖示多為 webp，所以自行解碼
 include(FetchContent)
 set(WEBP_BUILD_ANIM_UTILS OFF CACHE BOOL "" FORCE)
@@ -90,13 +71,17 @@ set(SOURCES
     resources/resources.qrc
 )
 
+# Windows：app.rc 內嵌 exe 圖示（resources/icons/app.ico）與版本資訊
 if(WIN32)
+    enable_language(RC)
     list(APPEND SOURCES resources/app.rc)
+    set_source_files_properties(resources/app.rc PROPERTIES
+        OBJECT_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/app.ico")
 endif()
 
 add_executable(ModInstaller WIN32 ${SOURCES})
 target_include_directories(ModInstaller PRIVATE src)
-target_link_libraries(ModInstaller PRIVATE Qt6::Widgets Qt6::Network Qt6::Svg QuaZip::QuaZip webp)
+target_link_libraries(ModInstaller PRIVATE Qt6::Widgets Qt6::Network Qt6::Svg Qt6::GuiPrivate webp)
 target_compile_definitions(ModInstaller PRIVATE APP_VERSION="${PROJECT_VERSION}")
 
 if(MSVC)

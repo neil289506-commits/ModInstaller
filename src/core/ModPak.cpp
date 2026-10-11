@@ -5,20 +5,19 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <quazip/quazip.h>
-#include <quazip/quazipfile.h>
+#include <private/qzipreader_p.h>
+#include <private/qzipwriter_p.h>
 
 namespace MI {
 
 struct ZipWriter::Impl {
     QString path;
-    QuaZip zip;
+    QZipWriter *zip = nullptr;
 };
 
 ZipWriter::ZipWriter(const QString &path) : d(new Impl)
 {
     d->path = path;
-    d->zip.setZipName(path);
 }
 ZipWriter::~ZipWriter()
 {
@@ -29,8 +28,10 @@ ZipWriter::~ZipWriter()
 bool ZipWriter::open(QString *err)
 {
     QDir().mkpath(QFileInfo(d->path).absolutePath());
-    d->zip.setZipName(d->path);
-    if (!d->zip.open(QuaZip::mdCreate)) {
+    d->zip = new QZipWriter(d->path, QIODevice::WriteOnly | QIODevice::Truncate);
+    if (!d->zip->isWritable()) {
+        delete d->zip;
+        d->zip = nullptr;
         if (err)
             *err = QStringLiteral("無法建立檔案：%1").arg(d->path);
         return false;
@@ -40,42 +41,34 @@ bool ZipWriter::open(QString *err)
 
 bool ZipWriter::addBytes(const QString &entry, const QByteArray &data, bool compress)
 {
-    QuaZipFile out(&d->zip);
-    QuaZipNewInfo info(entry);
-    if (!out.open(QIODevice::WriteOnly, info, nullptr, 0, compress ? 8 : 0))
+    if (!d->zip)
         return false;
-    out.write(data);
-    out.close();
-    return out.getZipError() == 0;
+    d->zip->setCompressionPolicy(compress ? QZipWriter::AlwaysCompress : QZipWriter::NeverCompress);
+    d->zip->addFile(entry, data);
+    return d->zip->status() == QZipWriter::NoError;
 }
 
 bool ZipWriter::addFile(const QString &entry, const QString &diskPath, bool compress)
 {
+    if (!d->zip)
+        return false;
     QFile in(diskPath);
     if (!in.open(QIODevice::ReadOnly))
         return false;
-    QuaZipFile out(&d->zip);
-    QuaZipNewInfo info(entry, diskPath);
-    if (!out.open(QIODevice::WriteOnly, info, nullptr, 0, compress ? 8 : 0))
-        return false;
-    while (!in.atEnd()) {
-        const QByteArray chunk = in.read(1 << 20);
-        if (out.write(chunk) != chunk.size()) {
-            out.close();
-            return false;
-        }
-    }
-    out.close();
-    return out.getZipError() == 0;
+    d->zip->setCompressionPolicy(compress ? QZipWriter::AlwaysCompress : QZipWriter::NeverCompress);
+    d->zip->addFile(entry, &in);
+    return d->zip->status() == QZipWriter::NoError;
 }
 
 bool ZipWriter::close()
 {
-    if (d->zip.isOpen()) {
-        d->zip.close();
-        return d->zip.getZipError() == 0;
-    }
-    return true;
+    if (!d->zip)
+        return true;
+    d->zip->close();
+    const bool ok = d->zip->status() == QZipWriter::NoError;
+    delete d->zip;
+    d->zip = nullptr;
+    return ok;
 }
 
 QList<InstalledMod> PakData::asInstalled() const
@@ -154,23 +147,16 @@ bool ModPak::write(const QString &path, const PakData &data, QString *err)
 
 bool ModPak::read(const QString &path, PakData *out, QString *err)
 {
-    QuaZip zip(path);
-    if (!zip.open(QuaZip::mdUnzip)) {
+    QZipReader zip(path, QIODevice::ReadOnly);
+    if (!zip.isReadable()) {
         if (err)
             *err = QStringLiteral("無法開啟 modpak：%1").arg(path);
         return false;
     }
-    auto readEntry = [&](const QString &name, QByteArray *data) {
-        if (!zip.setCurrentFile(name))
-            return false;
-        QuaZipFile f(&zip);
-        if (!f.open(QIODevice::ReadOnly))
-            return false;
-        *data = f.readAll();
-        return true;
-    };
-    QByteArray vb, mb;
-    if (!readEntry(QStringLiteral("version.info"), &vb) || !readEntry(QStringLiteral("mod.info"), &mb)) {
+    const QByteArray vb = zip.fileData(QStringLiteral("version.info"));
+    const QByteArray mb = zip.fileData(QStringLiteral("mod.info"));
+    zip.close();
+    if (vb.isEmpty() || mb.isEmpty()) {
         if (err)
             *err = QStringLiteral("modpak 缺少 version.info 或 mod.info");
         return false;

@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QFont>
+#include <QIcon>
 #include <QPalette>
 #include <QPointer>
 
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName(QStringLiteral("ModInstaller"));
     QApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
     QApplication::setStyle(QStringLiteral("Fusion"));
+    QApplication::setWindowIcon(QIcon(QStringLiteral(":/icons/app.png")));
     QPalette pal = QApplication::palette();
     pal.setColor(QPalette::Link, QColor(0x1b, 0xd9, 0x6a));
     pal.setColor(QPalette::LinkVisited, QColor(0x1b, 0xd9, 0x6a));

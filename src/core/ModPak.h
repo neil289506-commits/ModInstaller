@@ -33,7 +33,7 @@ public:
     static bool read(const QString &path, PakData *out, QString *err);
 };
 
-// zip 輔助（QuaZip）
+// zip 輔助（使用 Qt 內建的 QZipWriter，不需要額外的函式庫）
 class ZipWriter
 {
 public:
