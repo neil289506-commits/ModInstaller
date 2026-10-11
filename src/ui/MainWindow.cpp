@@ -1,4 +1,5 @@
 #include "MainWindow.h"
+#include <functional>
 #include "Flows.h"
 #include "SettingsDialog.h"
 #include "core/Settings.h"

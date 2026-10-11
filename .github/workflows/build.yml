@@ -1,0 +1,77 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: Windows (MSVC 2022 / Qt 6.8)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安裝 Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.*'
+          host: windows
+          target: desktop
+          arch: win64_msvc2022_64
+          cache: true
+
+      - name: 設定 MSVC 環境
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: 設定（libwebp 由 CMake 自動取得）
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+      - name: 編譯
+        run: cmake --build build --config Release
+
+      - name: 部署 Qt 相依檔案
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item build/ModInstaller.exe dist/
+          windeployqt --release --no-opengl-sw --no-system-d3d-compiler dist/ModInstaller.exe
+
+      - name: 打包
+        shell: pwsh
+        run: Compress-Archive -Path dist/* -DestinationPath ModInstaller-windows-x64.zip
+
+      - name: 上傳成品
+        uses: actions/upload-artifact@v4
+        with:
+          name: ModInstaller-windows-x64
+          path: ModInstaller-windows-x64.zip
+          if-no-files-found: error
+
+  release:
+    name: 發佈 Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: windows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ModInstaller-windows-x64
+      - name: 建立 Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ModInstaller-windows-x64.zip
+          generate_release_notes: true

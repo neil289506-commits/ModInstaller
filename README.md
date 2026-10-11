@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/icon.png" width="128" alt="ModInstaller">
+
 # ModInstaller
 
 **建立、分享與更新 Minecraft 模組包** — 搜尋 Modrinth / CurseForge、自動補齊依賴、一鍵輸出 zip 或超輕量的 `.modpak`
@@ -7,6 +9,7 @@
 ![Qt6](https://img.shields.io/badge/Qt-6-41cd52?logo=qt&logoColor=white)
 ![Platform](https://img.shields.io/badge/platform-Windows-0078d6)
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue)
+[![Build](https://github.com/neil289506-commits/ModInstaller/actions/workflows/build.yml/badge.svg)](https://github.com/neil289506-commits/ModInstaller/actions/workflows/build.yml)
 
 ![主畫面](docs/screenshots/01-home.png)
 
@@ -66,15 +69,20 @@ zip 輸出格式：所有模組放在 `mods/` 資料夾內。
 不需要 Python。程式用 Qt 網路直接下載（與原 `version.py` 相同的來源）並解析到
 `%LOCALAPPDATA%/ModInstaller/ModInstaller/version/`：Mojang、Fabric、Quilt、Forge（maven + promotions）、NeoForge、OptiFine。
 
-## 建置（Windows / MSVC 2022 / Qt 6）
+## 建置（Windows / MSVC 2022 / Qt 6.4+）
+只需要 **Qt 6** 與 **CMake 3.21+**，其他依賴由 CMake 自動處理：
+- zip / modpak 讀寫使用 Qt 內建的 `QZipReader` / `QZipWriter`（需要 Qt 的 private headers，官方安裝程式預設就有）
+- 模組圖示使用的 libwebp 會由 CMake 自動下載並靜態編譯（Qt 不一定附 WebP 外掛）
 ```bat
-vcpkg install quazip:x64-windows
-cmake -S . -B build -G "Ninja" -DCMAKE_PREFIX_PATH=<Qt6 路徑> ^
-      -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake
-cmake --build build --config Release
-windeployqt build\ModInstaller.exe
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=<Qt6 路徑>
+cmake --build build
+windeployqt --release build\ModInstaller.exe
 ```
-需要 Qt 6.4 以上（Widgets、Network、Svg、LinguistTools）。
+Qt 需勾選元件：Widgets、Network、Svg、Linguist Tools（`Qt Linguist`）。
+
+### GitHub Actions
+每次 push / PR 都會在 `windows-latest`（MSVC 2022 + Qt 6.8）編譯並上傳 `ModInstaller-windows-x64.zip` 成品。
+推送 `v*` 標籤（例如 `v1.0.0`）時會自動建立 GitHub Release 並附上成品。
 
 ## 開發用環境變數
 `MODINSTALLER_MODRINTH_API` / `MODINSTALLER_CURSEFORGE_API` 可把 API 指向模擬伺服器（測試用）。

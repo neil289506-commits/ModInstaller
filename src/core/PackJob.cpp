@@ -1,4 +1,5 @@
 #include "PackJob.h"
+#include <algorithm>
 #include "ModApi.h"
 #include "Util.h"
 #include <QCoreApplication>
