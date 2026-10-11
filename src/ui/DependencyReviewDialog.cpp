@@ -32,8 +32,12 @@ DependencyReviewDialog::DependencyReviewDialog(const QList<Selected> &selected, 
     m_tree = new QTreeWidget(this);
     m_tree->setHeaderLabels({tr("模組"), tr("版本"), tr("平台"), tr("被需要於")});
     m_tree->setRootIsDecorated(false);
+    m_tree->setFocusPolicy(Qt::NoFocus);
+    m_tree->header()->setStretchLastSection(false);
     m_tree->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-    m_tree->header()->setSectionResizeMode(3, QHeaderView::Stretch);
+    m_tree->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    m_tree->header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    m_tree->header()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     lay->addWidget(m_tree, 1);
 
     for (const auto &s : selected) {

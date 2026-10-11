@@ -30,6 +30,7 @@ UpdateModsDialog::UpdateModsDialog(const QList<UpdateCandidate> &list, int check
     m_tree = new QTreeWidget(this);
     m_tree->setHeaderLabels({tr("模組"), tr("目前版本"), tr("新版本")});
     m_tree->setRootIsDecorated(false);
+    m_tree->setFocusPolicy(Qt::NoFocus);
     m_tree->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     m_tree->header()->setSectionResizeMode(1, QHeaderView::Stretch);
     m_tree->header()->setSectionResizeMode(2, QHeaderView::Stretch);

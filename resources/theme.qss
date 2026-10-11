@@ -87,6 +87,15 @@ QRadioButton::indicator { border-radius: 9px; }
 QCheckBox::indicator:checked, QRadioButton::indicator:checked { background-color: #1bd96a; border: 1px solid #1bd96a; }
 
 /* 列表 / 樹狀 / 表格 */
+QTreeView::indicator, QListView::indicator {
+    width: 13px; height: 13px; border-radius: 3px;
+    background-color: #26292f; border: 1px solid #4a505b;
+}
+QTreeView::indicator:checked, QListView::indicator:checked {
+    background-color: #1bd96a; border: 1px solid #1bd96a; image: url(:/icons/check.svg);
+}
+QTreeView::indicator:hover, QListView::indicator:hover { border: 1px solid #1bd96a; }
+
 QListWidget, QTreeWidget, QTableWidget {
     background-color: #1d1f23;
     border: 1px solid #2c3037;
