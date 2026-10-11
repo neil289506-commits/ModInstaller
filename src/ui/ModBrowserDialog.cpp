@@ -46,7 +46,7 @@ public:
             p->setBrush(Qt::NoBrush);
             p->drawRoundedRect(r, 8, 8);
         }
-        const QPixmap icon = IconCache::i().get(idx.data(IconRole).toString());
+        const QPixmap icon = IconCache::i().get(idx.data(IconRole).toString(), idx.data(NameRole).toString());
         p->drawPixmap(QRectF(r.left() + 10, r.top() + 10, 56, 56), icon, QRectF(icon.rect()));
 
         const qreal tx = r.left() + 78;
@@ -220,7 +220,7 @@ ModBrowserDialog::ModBrowserDialog(const PackTarget &target, const QList<Install
         m_list->viewport()->update();
         const int row = m_list->currentRow();
         if (row >= 0 && row < m_packs.size() && m_packs[row].iconUrl == url)
-            m_icon->setPixmap(IconCache::i().get(url));
+            m_icon->setPixmap(IconCache::i().get(url, m_packs[row].name));
     });
 
     onProviderChanged(0);
@@ -335,7 +335,7 @@ void ModBrowserDialog::showPack(int row)
     m_meta->setText(tr("作者 %1  ·  下載 %2  ·  %3").arg(p.author, humanCount(p.downloads), providerName(p.provider)));
     m_summary->setText(p.summary);
     m_link->setText(p.websiteUrl.isEmpty() ? QString() : QStringLiteral("<a href=\"%1\">%2</a>").arg(p.websiteUrl, tr("在網頁上查看")));
-    m_icon->setPixmap(IconCache::i().get(p.iconUrl));
+    m_icon->setPixmap(IconCache::i().get(p.iconUrl, p.name));
 
     if (p.versionsLoaded) {
         populateVersions();
@@ -464,7 +464,7 @@ void ModBrowserDialog::refreshSelectedList()
         const Selected &s = m_sel[k];
         auto *it = new QListWidgetItem(QStringLiteral("%1  ·  %2").arg(s.pack.name, s.version.label()), m_selList);
         it->setData(Qt::UserRole, k);
-        it->setIcon(QIcon(IconCache::i().get(s.pack.iconUrl)));
+        it->setIcon(QIcon(IconCache::i().get(s.pack.iconUrl, s.pack.name)));
         it->setSizeHint(QSize(280, 40));
     }
     m_confirmBtn->setText(m_sel.isEmpty() ? tr("確認選取") : tr("確認選取（%1）").arg(m_sel.size()));

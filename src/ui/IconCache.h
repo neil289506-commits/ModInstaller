@@ -14,8 +14,10 @@ class IconCache : public QObject
 public:
     static IconCache &i();
     // 取得圖示；尚未載入時回傳預設圖並於載入完成後發出 loaded
-    QPixmap get(const QString &url);
-    static QPixmap placeholder();
+    QPixmap get(const QString &url, const QString &name = QString());
+    static QPixmap placeholder(const QString &name = QString());
+    // 解碼圖片（Qt 內建格式 + 內建 libwebp）
+    static QPixmap decode(const QByteArray &data);
 
 signals:
     void loaded(const QString &url);

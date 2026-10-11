@@ -26,6 +26,23 @@ if(NOT QuaZip-Qt6_FOUND)
     target_include_directories(QuaZip PUBLIC ${CMAKE_BINARY_DIR}/ext/quazip)
 endif()
 
+# libwebp：Qt 不一定附 WebP 外掛，但 Modrinth 的模組圖示多為 webp，所以自行解碼
+include(FetchContent)
+set(WEBP_BUILD_ANIM_UTILS OFF CACHE BOOL "" FORCE)
+set(WEBP_BUILD_CWEBP OFF CACHE BOOL "" FORCE)
+set(WEBP_BUILD_DWEBP OFF CACHE BOOL "" FORCE)
+set(WEBP_BUILD_GIF2WEBP OFF CACHE BOOL "" FORCE)
+set(WEBP_BUILD_IMG2WEBP OFF CACHE BOOL "" FORCE)
+set(WEBP_BUILD_VWEBP OFF CACHE BOOL "" FORCE)
+set(WEBP_BUILD_WEBPINFO OFF CACHE BOOL "" FORCE)
+set(WEBP_BUILD_WEBPMUX OFF CACHE BOOL "" FORCE)
+set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "" FORCE)
+set(WEBP_BUILD_LIBWEBPMUX OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(libwebp
+    GIT_REPOSITORY https://github.com/webmproject/libwebp.git
+    GIT_TAG v1.4.0)
+FetchContent_MakeAvailable(libwebp)
+
 set(SOURCES
     src/main.cpp
     src/core/Util.h
@@ -79,7 +96,7 @@ endif()
 
 add_executable(ModInstaller WIN32 ${SOURCES})
 target_include_directories(ModInstaller PRIVATE src)
-target_link_libraries(ModInstaller PRIVATE Qt6::Widgets Qt6::Network Qt6::Svg QuaZip::QuaZip)
+target_link_libraries(ModInstaller PRIVATE Qt6::Widgets Qt6::Network Qt6::Svg QuaZip::QuaZip webp)
 target_compile_definitions(ModInstaller PRIVATE APP_VERSION="${PROJECT_VERSION}")
 
 if(MSVC)
