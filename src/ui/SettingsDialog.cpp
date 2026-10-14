@@ -1,9 +1,12 @@
 #include "SettingsDialog.h"
+#include "core/DeviceCode.h"
 #include "core/Net.h"
+#include "core/PeerService.h"
 #include "core/Settings.h"
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDesktopServices>
+#include <QDir>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -58,6 +61,18 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent)
     m_lang->setCurrentIndex(qMax(0, m_lang->findData(Settings::i().language())));
     lay->addWidget(m_lang);
 
+    lay->addSpacing(8);
+    auto *rl = new QLabel(tr("模組包傳輸：Cloudflare 註冊服務網址"), this);
+    rl->setObjectName(QStringLiteral("fieldLabel"));
+    lay->addWidget(rl);
+    m_registry = new QLineEdit(Settings::i().registryUrl(), this);
+    m_registry->setPlaceholderText(tr("https://你的服務.workers.dev（用來確認 12 碼代碼不重複）"));
+    lay->addWidget(m_registry);
+    auto *dl = new QLabel(tr("本機代碼儲存位置：%1").arg(QDir::toNativeSeparators(DeviceCode::filePath()).toHtmlEscaped()), this);
+    dl->setObjectName(QStringLiteral("muted"));
+    dl->setWordWrap(true);
+    lay->addWidget(dl);
+
     lay->addSpacing(10);
     auto *btns = new QHBoxLayout;
     btns->addStretch(1);
@@ -95,6 +110,10 @@ void SettingsDialog::save()
     const QString lang = m_lang->currentData().toString();
     m_langChanged = lang != Settings::i().language();
     Settings::i().setLanguage(lang);
+    const bool registryChanged = m_registry->text().trimmed() != Settings::i().registryUrl();
+    Settings::i().setRegistryUrl(m_registry->text());
+    if (registryChanged)
+        PeerService::i().restart();
     accept();
 }
 

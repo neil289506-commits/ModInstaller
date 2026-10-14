@@ -24,6 +24,25 @@ FetchContent_Declare(libwebp
     GIT_TAG v1.4.0)
 FetchContent_MakeAvailable(libwebp)
 
+# libdatachannel：WebRTC 資料通道（模組包傳輸用）。優先使用已安裝的版本（例如 vcpkg），否則由 FetchContent 取得
+find_package(OpenSSL QUIET)
+find_package(LibDataChannel CONFIG QUIET)
+if(LibDataChannel_FOUND)
+    set(MI_DC_TARGET LibDataChannel::LibDataChannel)
+else()
+    message(STATUS "找不到已安裝的 libdatachannel，改用 FetchContent 取得（需要 OpenSSL）")
+    set(NO_MEDIA ON CACHE BOOL "" FORCE)
+    set(NO_EXAMPLES ON CACHE BOOL "" FORCE)
+    set(NO_TESTS ON CACHE BOOL "" FORCE)
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    FetchContent_Declare(libdatachannel
+        GIT_REPOSITORY https://github.com/paullouisageneau/libdatachannel.git
+        GIT_TAG v0.24.6
+        GIT_SUBMODULES_RECURSE TRUE)
+    FetchContent_MakeAvailable(libdatachannel)
+    set(MI_DC_TARGET LibDataChannel::LibDataChannelStatic)
+endif()
+
 set(SOURCES
     src/main.cpp
     src/core/Util.h
@@ -44,6 +63,10 @@ set(SOURCES
     src/core/ModPak.cpp
     src/core/PackJob.h
     src/core/PackJob.cpp
+    src/core/DeviceCode.h
+    src/core/DeviceCode.cpp
+    src/core/PeerService.h
+    src/core/PeerService.cpp
     src/ui/IconCache.h
     src/ui/IconCache.cpp
     src/ui/MainWindow.h
@@ -68,6 +91,10 @@ set(SOURCES
     src/ui/UpdateModsDialog.cpp
     src/ui/PakEditorDialog.h
     src/ui/PakEditorDialog.cpp
+    src/ui/TransferPanel.h
+    src/ui/TransferPanel.cpp
+    src/ui/RequestToastHost.h
+    src/ui/RequestToastHost.cpp
     resources/resources.qrc
 )
 
@@ -81,7 +108,7 @@ endif()
 
 add_executable(ModInstaller WIN32 ${SOURCES})
 target_include_directories(ModInstaller PRIVATE src)
-target_link_libraries(ModInstaller PRIVATE Qt6::Widgets Qt6::Network Qt6::Svg Qt6::GuiPrivate webp)
+target_link_libraries(ModInstaller PRIVATE Qt6::Widgets Qt6::Network Qt6::Svg Qt6::GuiPrivate webp ${MI_DC_TARGET})
 target_compile_definitions(ModInstaller PRIVATE APP_VERSION="${PROJECT_VERSION}")
 
 if(MSVC)

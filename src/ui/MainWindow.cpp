@@ -1,11 +1,14 @@
 #include "MainWindow.h"
 #include <functional>
 #include "Flows.h"
+#include "RequestToastHost.h"
 #include "SettingsDialog.h"
+#include "TransferPanel.h"
 #include "core/Settings.h"
 #include <QApplication>
 #include <QDesktopServices>
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QLibraryInfo>
 #include <QPainter>
@@ -144,10 +147,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
         grid->setRowStretch(r, 1);
     root->addWidget(gridHost, 1);
 
-    auto *foot = new QLabel(QStringLiteral("v%1  ·  GPL-3.0  ·  Based on PrismLauncher").arg(QStringLiteral(APP_VERSION)), central);
+    auto *bottom = new QWidget(central);
+    auto *bl2 = new QHBoxLayout(bottom);
+    bl2->setContentsMargins(24, 0, 24, 16);
+    auto *foot = new QLabel(QStringLiteral("v%1  ·  GPL-3.0  ·  Based on PrismLauncher").arg(QStringLiteral(APP_VERSION)), bottom);
     foot->setObjectName(QStringLiteral("footer"));
-    foot->setAlignment(Qt::AlignCenter);
-    root->addWidget(foot);
+    bl2->addWidget(foot, 0, Qt::AlignBottom | Qt::AlignLeft);
+    bl2->addStretch(1);
+    bl2->addWidget(new TransferPanel(bottom), 0, Qt::AlignBottom | Qt::AlignRight);
+    root->addWidget(bottom);
+
+    m_toasts = new RequestToastHost(central);
 
     setCentralWidget(central);
 }

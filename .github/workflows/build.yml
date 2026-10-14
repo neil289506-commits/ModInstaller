@@ -35,8 +35,22 @@ jobs:
         with:
           arch: x64
 
-      - name: 設定（libwebp 由 CMake 自動取得）
-        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+      - name: 快取 vcpkg 套件
+        uses: actions/cache@v4
+        with:
+          path: ~\AppData\Local\vcpkg\archives
+          key: vcpkg-openssl-x64-windows-static-md-${{ runner.os }}
+
+      - name: 安裝 OpenSSL（libdatachannel 的 TLS 需要，靜態連結）
+        shell: pwsh
+        run: vcpkg install openssl:x64-windows-static-md
+
+      - name: 設定（libwebp、libdatachannel 由 CMake 自動取得）
+        shell: pwsh
+        run: >
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+          -DVCPKG_TARGET_TRIPLET=x64-windows-static-md
 
       - name: 編譯
         run: cmake --build build --config Release

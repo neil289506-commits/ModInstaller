@@ -46,6 +46,11 @@ Fabric / Quilt / Forge / NeoForge 與遊戲版本，版本資料直接從官方�
 
 ![輸出模組包](docs/screenshots/05-export.png)
 
+### 5. 傳送給朋友
+右下角是你的 12 碼代碼；輸入對方的代碼按「傳送」，對方左下角會出現 **Request** 提醒，按下接受後才會開始傳輸。
+
+![模組包傳輸](docs/screenshots/06-transfer.png)
+
 ## 功能
 | 入口 | 說明 |
 |---|---|
@@ -54,6 +59,7 @@ Fabric / Quilt / Forge / NeoForge 與遊戲版本，版本資料直接從官方�
 | 請求模組包檔案 | 提供 `.modpak`，依 `mod.info` 下載、驗證 sha256，打包成 `<檔名>.zip` |
 | 設定 | CurseForge API Key、語言切換（繁體中文 / English） |
 | GitHub Repo | 開啟本專案頁面 |
+| 模組包傳輸 | 主畫面右下角顯示本機 12 碼代碼；輸入對方代碼即可傳送 `.modpak` / `.zip`，對方左下角會出現 Request 提醒，接受後才開始傳輸（點對點，不經過伺服器） |
 | 更新 pak | 開啟既有 `.modpak`，新增 / 移除模組（流程同「建立模組包」），再另存或覆寫 |
 
 所有輸出檔案都會讓使用者輸入名稱與儲存位置。
@@ -65,6 +71,14 @@ Fabric / Quilt / Forge / NeoForge 與遊戲版本，版本資料直接從官方�
 
 zip 輸出格式：所有模組放在 `mods/` 資料夾內。
 
+## 模組包傳輸
+- **代碼**：每台電腦第一次開啟時隨機產生 12 碼英數代碼（不含任何硬體資訊），同時存放在使用者層級的兩個位置（Windows 登錄檔 `HKCU\Software\ModInstaller\Device` 與 `%LOCALAPPDATA%\ModInstaller\ModInstaller\device.json`），任何一處遺失都會由另一處還原。
+- **不重複**：代碼會向你自己部署的 Cloudflare Worker（`cloudflare/`，D1 資料庫）註冊；若代碼已存在，客戶端會自動換新代碼重試。註冊服務網址在「設定」裡填寫。
+- **流程**：傳送方的 Request 經由 PeerJS 雲端伺服器（`0.peerjs.com`）交換訊號；接收方按下「接受」之前不會回應連線（不會洩漏 IP）；接受後走 WebRTC 點對點傳輸，並驗證 sha256；拒絕或逾時會通知傳送方。
+- 只允許傳送 `.modpak` / `.zip`，上限 8 GB；接收端的檔名會清理，且儲存的名稱與位置一律由你決定。
+- 兩台電腦都需要開著程式並顯示「已連線」；防火牆嚴格的網路會自動使用 PeerJS 的 TURN 中繼。
+- 部署註冊服務請見 [`cloudflare/README.md`](cloudflare/README.md)。
+
 ## 版本資料
 不需要 Python。程式用 Qt 網路直接下載（與原 `version.py` 相同的來源）並解析到
 `%LOCALAPPDATA%/ModInstaller/ModInstaller/version/`：Mojang、Fabric、Quilt、Forge（maven + promotions）、NeoForge、OptiFine。
@@ -72,7 +86,8 @@ zip 輸出格式：所有模組放在 `mods/` 資料夾內。
 ## 建置（Windows / MSVC 2022 / Qt 6.4+）
 只需要 **Qt 6** 與 **CMake 3.21+**，其他依賴由 CMake 自動處理：
 - zip / modpak 讀寫使用 Qt 內建的 `QZipReader` / `QZipWriter`（需要 Qt 的 private headers，官方安裝程式預設就有）
-- 模組圖示使用的 libwebp 會由 CMake 自動下載並靜態編譯（Qt 不一定附 WebP 外掛）
+- 模組圖示使用的 libwebp 與傳輸功能使用的 libdatachannel（WebRTC）會由 CMake 自動下載並靜態編譯
+- libdatachannel 需要 **OpenSSL**（Windows 建議 `vcpkg install openssl:x64-windows-static-md`，並在 CMake 加上 vcpkg 的 toolchain 與 `-DVCPKG_TARGET_TRIPLET=x64-windows-static-md`）
 ```bat
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=<Qt6 路徑>
 cmake --build build

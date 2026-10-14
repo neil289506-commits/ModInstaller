@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="/">
     <file>theme.qss</file>
+    <file>cacert.pem</file>
     <file>icons/update.svg</file>
     <file>icons/create.svg</file>
     <file>icons/request.svg</file>

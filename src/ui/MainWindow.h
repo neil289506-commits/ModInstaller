@@ -3,6 +3,8 @@
 
 namespace MI {
 
+class RequestToastHost;
+
 // 套用語言（zh_TW 為原始字串，en 載入英文翻譯）
 void applyLanguage(const QString &lang);
 
@@ -17,6 +19,7 @@ signals:
 
 private:
     void openSettings();
+    RequestToastHost *m_toasts = nullptr;
 };
 
 } // namespace MI
