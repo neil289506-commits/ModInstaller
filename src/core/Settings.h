@@ -12,6 +12,10 @@ public:
     QString curseforgeKey() const;
     void setCurseforgeKey(const QString &k);
 
+    // Cloudflare 註冊服務網址（用於確認 12 碼代碼不重複）
+    QString registryUrl() const;
+    void setRegistryUrl(const QString &u);
+
     QString language() const; // "zh_TW" / "en"
     void setLanguage(const QString &l);
 

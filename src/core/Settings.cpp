@@ -19,6 +19,9 @@ Settings::Settings()
 QString Settings::curseforgeKey() const { return m_s.value(QStringLiteral("curseforge/apiKey")).toString().trimmed(); }
 void Settings::setCurseforgeKey(const QString &k) { m_s.setValue(QStringLiteral("curseforge/apiKey"), k.trimmed()); }
 
+QString Settings::registryUrl() const { return m_s.value(QStringLiteral("transfer/registryUrl")).toString().trimmed(); }
+void Settings::setRegistryUrl(const QString &u) { m_s.setValue(QStringLiteral("transfer/registryUrl"), u.trimmed()); }
+
 QString Settings::language() const
 {
     const QString v = m_s.value(QStringLiteral("ui/language")).toString();
