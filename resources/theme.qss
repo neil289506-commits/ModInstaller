@@ -151,3 +151,11 @@ QSplitter::handle { background: transparent; width: 10px; }
 QToolTip { background-color: #26292f; color: #eceef1; border: 1px solid #343942; padding: 4px 8px; }
 QMessageBox { background-color: #16181c; }
 QMessageBox QLabel { color: #d6dbe1; }
+
+/* 模組包傳輸 */
+QFrame#transferPanel { background-color: #1d1f23; border: 1px solid #2c3037; border-radius: 12px; }
+QFrame#transferPanel QLabel { background: transparent; }
+QLabel#deviceCode { font-family: "Cascadia Mono", "Consolas", monospace; font-size: 11pt; font-weight: 700; color: #1bd96a; letter-spacing: 0.5px; }
+QFrame#requestCard { background-color: #1f2227; border: 1px solid #1bd96a; border-radius: 12px; }
+QFrame#requestCard QLabel { background: transparent; }
+QLabel#requestHead { color: #1bd96a; font-weight: 800; font-size: 9pt; letter-spacing: 2px; }

@@ -20,6 +20,7 @@ private slots:
 
 private:
     QLineEdit *m_key;
+    QLineEdit *m_registry;
     QComboBox *m_lang;
     QLabel *m_testResult;
     bool m_langChanged = false;

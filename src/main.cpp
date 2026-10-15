@@ -1,5 +1,6 @@
 // ModInstaller - Minecraft 模組包建立 / 更新工具（僅支援 Windows）
 // 模組搜尋與依賴解析邏輯移植自 PrismLauncher（GPL-3.0），本專案以 GPL-3.0 授權。
+#include "core/PeerService.h"
 #include "core/Settings.h"
 #include <functional>
 #include "ui/MainWindow.h"
@@ -28,6 +29,8 @@ int main(int argc, char *argv[])
         app.setStyleSheet(QString::fromUtf8(qss.readAll()));
 
     MI::applyLanguage(MI::Settings::i().language());
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, []() { MI::PeerService::i().stop(); });
+    MI::PeerService::i().start();
 
     QPointer<MI::MainWindow> win;
     std::function<void()> show = [&]() {
