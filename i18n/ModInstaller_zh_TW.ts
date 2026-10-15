@@ -736,71 +736,76 @@
     </message>
     <message>
         <location filename="../src/ui/SettingsDialog.cpp" line="38" />
+        <source>留空使用程式內建的 Key；也可以貼上你自己的 API Key</source>
+        <translation>留空使用程式內建的 Key；也可以貼上你自己的 API Key</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/SettingsDialog.cpp" line="39" />
         <source>貼上你的 API Key（用於搜尋 / 下載 CurseForge 模組）</source>
         <translation>貼上你的 API Key（用於搜尋 / 下載 CurseForge 模組）</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="39" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="40" />
         <source>顯示</source>
         <translation>顯示</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="40" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="41" />
         <source>測試</source>
         <translation>測試</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="50" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="51" />
         <source>前往 CurseForge 開發者後台申請 API Key</source>
         <translation>前往 CurseForge 開發者後台申請 API Key</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="55" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="56" />
         <source>語言（i18n）</source>
         <translation>語言（i18n）</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="65" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="66" />
         <source>模組包傳輸：Cloudflare 註冊服務網址</source>
         <translation>模組包傳輸：Cloudflare 註冊服務網址</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="69" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="70" />
         <source>https://你的服務.workers.dev（用來確認 12 碼代碼不重複）</source>
         <translation>https://你的服務.workers.dev（用來確認 12 碼代碼不重複）</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="71" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="72" />
         <source>本機代碼儲存位置：%1</source>
         <translation>本機代碼儲存位置：%1</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="79" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="80" />
         <source>取消</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="81" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="82" />
         <source>儲存</source>
         <translation>儲存</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="97" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="100" />
         <source>請先輸入 API Key</source>
         <translation>請先輸入 API Key</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="100" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="103" />
         <source>測試中…</source>
         <translation>測試中…</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="103" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="106" />
         <source>✔ API Key 可以使用</source>
         <translation>✔ API Key 可以使用</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="103" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="106" />
         <source>✘ 驗證失敗：%1</source>
         <translation>✘ 驗證失敗：%1</translation>
     </message>

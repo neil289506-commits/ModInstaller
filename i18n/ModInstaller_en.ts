@@ -736,71 +736,76 @@
     </message>
     <message>
         <location filename="../src/ui/SettingsDialog.cpp" line="38" />
+        <source>留空使用程式內建的 Key；也可以貼上你自己的 API Key</source>
+        <translation>Leave empty to use the built-in key, or paste your own API key</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/SettingsDialog.cpp" line="39" />
         <source>貼上你的 API Key（用於搜尋 / 下載 CurseForge 模組）</source>
         <translation>Paste your API key (used to search / download CurseForge mods)</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="39" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="40" />
         <source>顯示</source>
         <translation>Show</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="40" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="41" />
         <source>測試</source>
         <translation>Test</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="50" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="51" />
         <source>前往 CurseForge 開發者後台申請 API Key</source>
         <translation>Get an API key from the CurseForge developer console</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="55" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="56" />
         <source>語言（i18n）</source>
         <translation>Language (i18n)</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="65" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="66" />
         <source>模組包傳輸：Cloudflare 註冊服務網址</source>
         <translation>Modpack transfer: Cloudflare registry URL</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="69" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="70" />
         <source>https://你的服務.workers.dev（用來確認 12 碼代碼不重複）</source>
         <translation>https://your-service.workers.dev (used to keep 12-character codes unique)</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="71" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="72" />
         <source>本機代碼儲存位置：%1</source>
         <translation>Device code is stored at: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="79" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="80" />
         <source>取消</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="81" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="82" />
         <source>儲存</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="97" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="100" />
         <source>請先輸入 API Key</source>
         <translation>Please enter an API key first</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="100" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="103" />
         <source>測試中…</source>
         <translation>Testing…</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="103" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="106" />
         <source>✔ API Key 可以使用</source>
         <translation>✔ API key works</translation>
     </message>
     <message>
-        <location filename="../src/ui/SettingsDialog.cpp" line="103" />
+        <location filename="../src/ui/SettingsDialog.cpp" line="106" />
         <source>✘ 驗證失敗：%1</source>
         <translation>✘ Verification failed: %1</translation>
     </message>

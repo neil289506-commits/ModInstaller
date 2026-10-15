@@ -35,7 +35,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent)
     lay->addWidget(kl);
     m_key = new QLineEdit(Settings::i().curseforgeKey(), this);
     m_key->setEchoMode(QLineEdit::Password);
-    m_key->setPlaceholderText(tr("貼上你的 API Key（用於搜尋 / 下載 CurseForge 模組）"));
+    m_key->setPlaceholderText(Settings::i().hasEmbeddedCurseforgeKey() ? tr("留空使用程式內建的 Key；也可以貼上你自己的 API Key")
+                                                                       : tr("貼上你的 API Key（用於搜尋 / 下載 CurseForge 模組）"));
     auto *show = new QCheckBox(tr("顯示"), this);
     auto *test = new QPushButton(tr("測試"), this);
     test->setObjectName(QStringLiteral("secondary"));
@@ -92,7 +93,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent)
 
 void SettingsDialog::testKey()
 {
-    const QString key = m_key->text().trimmed();
+    QString key = m_key->text().trimmed();
+    if (key.isEmpty())
+        key = Settings::i().effectiveCurseforgeKey(); // 留空 = 測試內建的 Key
     if (key.isEmpty()) {
         m_testResult->setText(tr("請先輸入 API Key"));
         return;

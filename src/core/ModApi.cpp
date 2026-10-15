@@ -22,7 +22,7 @@ constexpr int kFlameModClass = 6;
 
 Headers flameHeaders()
 {
-    return {{"x-api-key", Settings::i().curseforgeKey().toUtf8()}, {"Accept", "application/json"}};
+    return {{"x-api-key", Settings::i().effectiveCurseforgeKey().toUtf8()}, {"Accept", "application/json"}};
 }
 Headers modrinthHeaders() { return {{"Accept", "application/json"}}; }
 
@@ -178,7 +178,7 @@ void sortByDate(QList<ModVersion> &l)
 
 } // namespace
 
-bool ModApi::hasFlameKey() { return !Settings::i().curseforgeKey().isEmpty(); }
+bool ModApi::hasFlameKey() { return !Settings::i().effectiveCurseforgeKey().isEmpty(); }
 QString ModApi::flameKeyMissingText() { return QCoreApplication::translate("ModApi", "尚未設定 CurseForge API Key，請至「設定」填寫。"); }
 
 QList<SortMethod> ModApi::sortingMethods(Provider p)

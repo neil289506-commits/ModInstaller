@@ -1,4 +1,5 @@
 #include "Settings.h"
+#include "EmbeddedKeys.h"
 #include <QDir>
 #include <QLocale>
 #include <QStandardPaths>
@@ -18,6 +19,12 @@ Settings::Settings()
 
 QString Settings::curseforgeKey() const { return m_s.value(QStringLiteral("curseforge/apiKey")).toString().trimmed(); }
 void Settings::setCurseforgeKey(const QString &k) { m_s.setValue(QStringLiteral("curseforge/apiKey"), k.trimmed()); }
+bool Settings::hasEmbeddedCurseforgeKey() const { return kEmbeddedCurseForgeKey[0] != '\0'; }
+QString Settings::effectiveCurseforgeKey() const
+{
+    const QString user = curseforgeKey();
+    return user.isEmpty() ? QString::fromLatin1(kEmbeddedCurseForgeKey) : user;
+}
 
 QString Settings::registryUrl() const { return m_s.value(QStringLiteral("transfer/registryUrl")).toString().trimmed(); }
 void Settings::setRegistryUrl(const QString &u) { m_s.setValue(QStringLiteral("transfer/registryUrl"), u.trimmed()); }
