@@ -95,6 +95,11 @@ windeployqt --release build\ModInstaller.exe
 ```
 Qt 需勾選元件：Widgets、Network、Svg、Linguist Tools（`Qt Linguist`）。
 
+### 內建的 CurseForge API Key
+發佈版會在建置時把 CurseForge API Key 內建進程式，使用者不需要自己申請；在「設定」填入自己的 Key 時，會優先使用使用者的 Key。
+金鑰不在原始碼裡：CI 從 repo secret `curseforge_api` 取得（只有 push / 標籤建置會帶入，PR 建置不會），本機建置可用環境變數 `CURSEFORGE_API_KEY` 或 `-DMI_CURSEFORGE_API_KEY=` 帶入；沒有設定時，使用者需自行在「設定」填寫。
+內建的金鑰一定可以從公開發佈的執行檔中被取出，請當作半公開的金鑰（建議使用專用帳號，必要時重新產生）。
+
 ### GitHub Actions
 每次 push / PR 都會在 `windows-latest`（MSVC 2022 + Qt 6.8）編譯並上傳 `ModInstaller-windows-x64.zip` 成品。
 推送 `v*` 標籤（例如 `v1.0.0`）時會自動建立 GitHub Release 並附上成品。

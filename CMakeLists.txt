@@ -98,6 +98,24 @@ set(SOURCES
     resources/resources.qrc
 )
 
+# 內建的 CurseForge API Key：從環境變數 CURSEFORGE_API_KEY（或 -DMI_CURSEFORGE_API_KEY=）取得，
+# 只寫進建置目錄產生的標頭檔，不會出現在原始碼或 git 裡。沒有設定時，使用者要在「設定」自行填寫。
+if(NOT MI_CURSEFORGE_API_KEY AND DEFINED ENV{CURSEFORGE_API_KEY})
+    set(MI_CURSEFORGE_API_KEY "$ENV{CURSEFORGE_API_KEY}")
+endif()
+string(STRIP "${MI_CURSEFORGE_API_KEY}" MI_CURSEFORGE_API_KEY)
+if(MI_CURSEFORGE_API_KEY AND NOT MI_CURSEFORGE_API_KEY MATCHES "^[A-Za-z0-9$./_=+-]+$")
+    message(WARNING "CURSEFORGE_API_KEY 含有不支援的字元，已忽略")
+    set(MI_CURSEFORGE_API_KEY "")
+endif()
+if(MI_CURSEFORGE_API_KEY)
+    string(LENGTH "${MI_CURSEFORGE_API_KEY}" _mi_key_len)
+    message(STATUS "已設定內建的 CurseForge API Key（長度 ${_mi_key_len}）")
+else()
+    message(STATUS "未設定內建的 CurseForge API Key")
+endif()
+configure_file(src/core/EmbeddedKeys.h.in ${CMAKE_BINARY_DIR}/generated/EmbeddedKeys.h @ONLY)
+
 # Windows：app.rc 內嵌 exe 圖示（resources/icons/app.ico）與版本資訊
 if(WIN32)
     enable_language(RC)
@@ -107,7 +125,7 @@ if(WIN32)
 endif()
 
 add_executable(ModInstaller WIN32 ${SOURCES})
-target_include_directories(ModInstaller PRIVATE src)
+target_include_directories(ModInstaller PRIVATE src ${CMAKE_BINARY_DIR}/generated)
 target_link_libraries(ModInstaller PRIVATE Qt6::Widgets Qt6::Network Qt6::Svg Qt6::GuiPrivate webp ${MI_DC_TARGET})
 target_compile_definitions(ModInstaller PRIVATE APP_VERSION="${PROJECT_VERSION}")
 

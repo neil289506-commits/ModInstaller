@@ -47,6 +47,10 @@ jobs:
 
       - name: 設定（libwebp、libdatachannel 由 CMake 自動取得）
         shell: pwsh
+        env:
+          # 內建的 CurseForge API Key（repo secret `curseforge_api`）。
+          # 只在 push / 手動執行 / 標籤建置帶入；PR 建置不帶，避免 PR 的公開成品含有金鑰。
+          CURSEFORGE_API_KEY: ${{ github.event_name != 'pull_request' && secrets.curseforge_api || '' }}
         run: >
           cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"

@@ -1,0 +1,6 @@
+// 由 CMake 於建置時產生（configure_file），請勿手動編輯，也不要提交到 git。
+// 金鑰來自環境變數 CURSEFORGE_API_KEY（CI 由 repo secret `curseforge_api` 傳入）；沒有設定時為空字串。
+#pragma once
+namespace MI {
+inline constexpr const char *kEmbeddedCurseForgeKey = "@MI_CURSEFORGE_API_KEY@";
+}
