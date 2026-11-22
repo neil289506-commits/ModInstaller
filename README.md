@@ -2,6 +2,10 @@
 
 <img src="docs/icon.png" width="128" alt="ModInstaller">
 
+#公用worker
+modinstaller-codes.neil289506.workers.dev
+
+
 # ModInstaller
 
 **建立、分享與更新 Minecraft 模組包** — 搜尋 Modrinth / CurseForge、自動補齊依賴、一鍵輸出 zip 或超輕量的 `.modpak`
