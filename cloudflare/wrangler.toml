@@ -7,4 +7,4 @@ compatibility_date = "2025-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "modinstaller-codes"
-database_id = "請填入 wrangler d1 create 輸出的 database_id"
+database_id = "cdb8dd65-392c-4a07-92a5-e092a2127f82"

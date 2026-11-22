@@ -1,4 +1,5 @@
 build/
+release/
 *.user
 .vs/
 CMakeUserPresets.json
